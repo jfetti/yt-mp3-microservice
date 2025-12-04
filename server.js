@@ -11,6 +11,9 @@ function extractVideoId(url) {
   return match ? match[1] : null;
 }
 
+// choose a reliable backend
+const PIPED_API = "https://pipedapi.syncpundit.com";  // BEST uptime
+
 app.post("/convert", async (req, res) => {
   try {
     const { youtubeUrl } = req.body;
@@ -20,12 +23,13 @@ app.post("/convert", async (req, res) => {
       return res.status(400).json({ error: "Invalid YouTube URL" });
     }
 
-    const apiUrl = `https://piped.video/streams/${videoId}`;
+    const apiUrl = `${PIPED_API}/streams/${videoId}`;
 
     const response = await fetch(apiUrl);
     const data = await response.json();
 
     if (!data.audioStreams || data.audioStreams.length === 0) {
+      console.error("No audio streams:", data);
       return res.status(500).json({ error: "No audio streams available" });
     }
 
@@ -44,8 +48,7 @@ app.post("/convert", async (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("YouTube MP3 microservice (Piped backend) running");
+  res.send("YouTube MP3 microservice (stable Piped backend) running");
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Service running on port ${PORT}`));
+app.listen(3000, () => console.log("Service running on port 3000"));
