@@ -11,8 +11,8 @@ function extractVideoId(url) {
   return match ? match[1] : null;
 }
 
-// choose a reliable backend
-const PIPED_API = "https://pipedapi.syncpundit.com";  // BEST uptime
+// FIXED — stable global backend
+const PIPED_API = "https://pipedapi.cloudflareclient.com";
 
 app.post("/convert", async (req, res) => {
   try {
@@ -48,7 +48,7 @@ app.post("/convert", async (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("YouTube MP3 microservice (stable Piped backend) running");
+  res.send("YouTube MP3 microservice (Piped backend) running");
 });
 
-app.listen(3000, () => console.log("Service running on port 3000"));
+app.listen(3000, () => console.log(`Service running on port 3000`));
